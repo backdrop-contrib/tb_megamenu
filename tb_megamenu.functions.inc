@@ -10,7 +10,7 @@ function tb_megamenu_check_library($module, $name) {
       $files['js'] = libraries_get_path($name) . '/' . key($library['files']['js']);
     }
   }
-  elseif ($library = drupal_get_library($module, $name)) {
+  elseif ($library = backdrop_get_library($module, $name)) {
     // Get all directories in /sites/all/libraries fully or partially matching $name.
     $paths = [];
     foreach (glob('sites/all/libraries/' . $name . '*') as $path) {
@@ -45,18 +45,18 @@ function tb_megamenu_add_css($file) {
       mkdir($css_uri, 0777);
     }
     if (!class_exists('lessc')) {
-      include_once drupal_get_path('module', 'tb_megamenu') . '/includes/lessphp/lessc.inc.php';
+      include_once backdrop_get_path('module', 'tb_megamenu') . '/includes/lessphp/lessc.inc.php';
     }
     $less = new lessc();
     $output = $less->compileFile($file);
     file_put_contents($css_uri . "/" . $path_info['filename'] . ".css", $output);
-    drupal_add_css($css_uri . "/" . $path_info['filename'] . ".css", array(
+    backdrop_add_css($css_uri . "/" . $path_info['filename'] . ".css", array(
       'group' => CSS_DEFAULT,
       'basename' => 'tb-megamenu-' . $path_info['filename'] . ".css",
     ));
   }
   else {
-    drupal_add_css($file, array(
+    backdrop_add_css($file, array(
       'group' => CSS_DEFAULT,
       'basename' => 'tb-megamenu-' . $path_info['basename'],
     ));
@@ -80,7 +80,7 @@ function tb_megamenu_get_blocks_info() {
 function tb_megamenu_get_blocks_options() {
   static $_blocks_array = array();
   if (empty($_blocks_array)) {
-    $blocks = _block_rehash($GLOBALS['conf']['theme_default']);
+    $blocks = block_rehash($GLOBALS['conf']['theme_default']);
     $_blocks_array = array();
     foreach ($blocks as $block) {
       if ($block['module'] != 'tb_megamenu') {
@@ -106,7 +106,7 @@ function tb_megamenu_build_page_trail($page_menu) {
     if ($item ['link'] ['in_active_trail']) {
       $trail [$item ['link'] ['mlid']] = $item;
     }
-    elseif ($item['link']['href'] == '<front>' && drupal_is_front_page()) {
+    elseif ($item['link']['href'] == '<front>' && backdrop_is_front_page()) {
       $trail [$item ['link'] ['mlid']] = $item;
     }
     if ($item ['below']) {
@@ -117,7 +117,7 @@ function tb_megamenu_build_page_trail($page_menu) {
 }
 
 function tb_megamenu_get_megamenus() {
-  $query = db_select('menu_custom', 'm');
+  $query = db_select('menu_links', 'm');
   $query->leftJoin('tb_megamenus', 't', 't.menu_name = m.menu_name');
   $query->fields('m');
   $menus = $query->execute()->fetchAll();
@@ -126,7 +126,7 @@ function tb_megamenu_get_megamenus() {
 
 function tb_megamenu_get_menu($menu_name) {
   global $language;
-  $query = db_select('menu_custom', 'm');
+  $query = db_select('menu_links', 'm');
   $query->leftJoin('tb_megamenus', 't', 't.menu_name = m.menu_name');
   $query->fields('m');
   $query->addField('t', 'menu_config');
@@ -208,7 +208,7 @@ function tb_megamenu_find_templates($path) {
   $templates = array();
   $regex = '/\.tpl\.php$/';
 
-  $files = drupal_system_listing($regex, $path, 'name', 0);
+  $files = backdrop_system_listing($regex, $path, 'name', 0);
   foreach ($files as $template => $file) {
     if (($pos = strpos($template, '.')) !== FALSE) {
       $template = substr($template, 0, $pos);
@@ -544,9 +544,9 @@ function tb_megamenu_render_block($delta = 0) {
       '#type' => 'markup',
       '#markup' => theme('tb_megamenu', array('menu_name' => $delta, 'section' => 'backend',)),
   ));
-  drupal_add_js('Drupal.TBMegaMenu = Drupal.TBMegaMenu || {};', array('type' => 'inline'));
-  drupal_add_js('Drupal.TBMegaMenu.TBElementsCounter = ' . json_encode($tb_elements_counter), array('type' => 'inline'));
-  drupal_add_js('Drupal.TBMegaMenu.TBElementsCounter = ' . json_encode($tb_elements_counter), array('type' => 'inline'));
+  backdrop_add_js('Backdrop.TBMegaMenu = Backdrop.TBMegaMenu || {};', array('type' => 'inline'));
+  backdrop_add_js('Backdrop.TBMegaMenu.TBElementsCounter = ' . json_encode($tb_elements_counter), array('type' => 'inline'));
+  backdrop_add_js('Backdrop.TBMegaMenu.TBElementsCounter = ' . json_encode($tb_elements_counter), array('type' => 'inline'));
   return $block;
 }
 
@@ -593,9 +593,9 @@ function tb_megamenu_find_hook_templates($cache, $path) {
   $templates = array();
   $regex = '/\.tpl\.php$/';
 
-  // Because drupal_system_listing works the way it does, we check for real
+  // Because backdrop_system_listing works the way it does, we check for real
   // templates separately from checking for patterns.
-  $files = drupal_system_listing($regex, $path, 'name', 0);
+  $files = backdrop_system_listing($regex, $path, 'name', 0);
   if (isset($files['tb-megamenu-submenu--default.tpl'])) {
     unset($files['tb-megamenu-submenu--default.tpl']);
   }
@@ -670,16 +670,16 @@ function tb_megamenu_is_a_key($str) {
 
 function tb_megamenu_replace_css() {
   $files = array(
-    drupal_get_path('module', 'tb_megamenu') . '/css/admin.css',
-    drupal_get_path('module', 'tb_megamenu') . '/css/backend.css',
-    drupal_get_path('module', 'tb_megamenu') . '/css/base.css',
-    drupal_get_path('module', 'tb_megamenu') . '/css/bootstrap.css',
-    drupal_get_path('module', 'tb_megamenu') . '/css/bootstrap-responsive.css',
-    drupal_get_path('module', 'tb_megamenu') . '/css/default.css',
-    drupal_get_path('module', 'tb_megamenu') . '/css/styles/black.css',
-    drupal_get_path('module', 'tb_megamenu') . '/css/styles/blue.css',
-    drupal_get_path('module', 'tb_megamenu') . '/css/styles/green.css',
-    drupal_get_path('module', 'tb_megamenu') . '/css/styles/orange.css',
+    backdrop_get_path('module', 'tb_megamenu') . '/css/admin.css',
+    backdrop_get_path('module', 'tb_megamenu') . '/css/backend.css',
+    backdrop_get_path('module', 'tb_megamenu') . '/css/base.css',
+    backdrop_get_path('module', 'tb_megamenu') . '/css/bootstrap.css',
+    backdrop_get_path('module', 'tb_megamenu') . '/css/bootstrap-responsive.css',
+    backdrop_get_path('module', 'tb_megamenu') . '/css/default.css',
+    backdrop_get_path('module', 'tb_megamenu') . '/css/styles/black.css',
+    backdrop_get_path('module', 'tb_megamenu') . '/css/styles/blue.css',
+    backdrop_get_path('module', 'tb_megamenu') . '/css/styles/green.css',
+    backdrop_get_path('module', 'tb_megamenu') . '/css/styles/orange.css',
   );
   foreach ($files as $css_file) {
     $output = array();
@@ -708,7 +708,7 @@ function tb_megamenu_replace_css() {
 }
 
 function tb_megamenu_get_counter($key) {
-  $value = &drupal_static($key, 0);
+  $value = &backdrop_static($key, 0);
   $value++;
   global $tb_elements_counter;
   if (!$tb_elements_counter) {

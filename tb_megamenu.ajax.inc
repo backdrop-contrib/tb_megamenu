@@ -11,7 +11,7 @@ function tb_megamenu_request() {
       global $language;
       $token = isset($_SERVER['HTTP_X_CSRF_TOKEN']) ? $_SERVER['HTTP_X_CSRF_TOKEN'] : NULL;
       $menu_name = isset($_POST['menu_name']) ? $_POST['menu_name'] : NULL;
-      if (drupal_valid_token($token, $menu_name)) {
+      if (backdrop_valid_token($token, $menu_name)) {
         $menu_config = isset($_POST['menu_config']) ? $_POST['menu_config'] : NULL;
         $block_config = isset($_POST['block_config']) ? $_POST['block_config'] : NULL;
         if($menu_config && $menu_name) {

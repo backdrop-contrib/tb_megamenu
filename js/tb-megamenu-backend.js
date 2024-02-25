@@ -1,7 +1,7 @@
-Drupal.TBMegaMenu = Drupal.TBMegaMenu || {};
+Backdrop.TBMegaMenu = Backdrop.TBMegaMenu || {};
 
 (function ($) {
-  Drupal.behaviors.tbMegaMenuBackendAction = {
+  Backdrop.behaviors.tbMegaMenuBackendAction = {
     attach: function(context) {
       $('select[name="tb-megamenu-animation"]').change(function() {
         $('#tb-megamenu-duration-wrapper').css({'display': ($(this).val() == 'none' ? 'none' : 'inline-block')});

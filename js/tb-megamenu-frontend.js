@@ -1,15 +1,15 @@
-Drupal.TBMegaMenu = Drupal.TBMegaMenu || {};
+Backdrop.TBMegaMenu = Backdrop.TBMegaMenu || {};
 
 (function ($) {
-  Drupal.TBMegaMenu.oldWindowWidth = 0;
-  Drupal.TBMegaMenu.displayedMenuMobile = false;
-  Drupal.TBMegaMenu.supportedScreens = [980];
-  Drupal.TBMegaMenu.menuResponsive = function () {
+  Backdrop.TBMegaMenu.oldWindowWidth = 0;
+  Backdrop.TBMegaMenu.displayedMenuMobile = false;
+  Backdrop.TBMegaMenu.supportedScreens = [980];
+  Backdrop.TBMegaMenu.menuResponsive = function () {
     var windowWidth = window.innerWidth ? window.innerWidth : $(window).width();
     var navCollapse = $('.tb-megamenu').children('.nav-collapse');
-    if (windowWidth < Drupal.TBMegaMenu.supportedScreens[0]) {
+    if (windowWidth < Backdrop.TBMegaMenu.supportedScreens[0]) {
       navCollapse.addClass('collapse');
-      if (Drupal.TBMegaMenu.displayedMenuMobile) {
+      if (Backdrop.TBMegaMenu.displayedMenuMobile) {
         navCollapse.css({height: 'auto', overflow: 'visible'});
       } else {
         navCollapse.css({height: 0, overflow: 'hidden'});
@@ -23,7 +23,7 @@ Drupal.TBMegaMenu = Drupal.TBMegaMenu || {};
     }
   };
 
-  Drupal.TBMegaMenu.focusNextPrevElement = function (direction) {
+  Backdrop.TBMegaMenu.focusNextPrevElement = function (direction) {
     // Add all the elements we want to include in our selection
     var focusableElements = 'a:not([disabled]), button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), details:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])';
     var $current = $(document.activeElement);
@@ -49,7 +49,7 @@ Drupal.TBMegaMenu = Drupal.TBMegaMenu || {};
   }
 
 
-  Drupal.behaviors.tbMegaMenuAction = {
+  Backdrop.behaviors.tbMegaMenuAction = {
     attach: function(context) {
 
       /* Keyboard Control Setup */
@@ -272,7 +272,7 @@ Drupal.TBMegaMenu = Drupal.TBMegaMenu || {};
             nav_close_megamenu();
 
             // Focus on the next element.
-            Drupal.TBMegaMenu.focusNextPrevElement('next');
+            Backdrop.TBMegaMenu.focusNextPrevElement('next');
           }
         }
 
@@ -282,7 +282,7 @@ Drupal.TBMegaMenu = Drupal.TBMegaMenu || {};
             linkArray[curPos[0] - 1][-1].focus();
           } else {
             // Focus on the previous element.
-            Drupal.TBMegaMenu.focusNextPrevElement('prev');
+            Backdrop.TBMegaMenu.focusNextPrevElement('prev');
           }
         }
 
@@ -392,11 +392,11 @@ Drupal.TBMegaMenu = Drupal.TBMegaMenu || {};
           $(This).click(function() {
             if(parseInt($(this).parent().children('.nav-collapse').height())) {
               $(this).parent().children('.nav-collapse').css({height: 0, overflow: 'hidden'});
-              Drupal.TBMegaMenu.displayedMenuMobile = false;
+              Backdrop.TBMegaMenu.displayedMenuMobile = false;
             }
             else {
               $(this).parent().children('.nav-collapse').css({height: 'auto', overflow: 'visible'});
-              Drupal.TBMegaMenu.displayedMenuMobile = true;
+              Backdrop.TBMegaMenu.displayedMenuMobile = true;
             }
           });
         });
@@ -486,9 +486,9 @@ Drupal.TBMegaMenu = Drupal.TBMegaMenu || {};
 
         $(window).resize(function() {
           var windowWidth = window.innerWidth ? window.innerWidth : $(window).width();
-          if(windowWidth != Drupal.TBMegaMenu.oldWindowWidth){
-            Drupal.TBMegaMenu.oldWindowWidth = windowWidth;
-            Drupal.TBMegaMenu.menuResponsive();
+          if(windowWidth != Backdrop.TBMegaMenu.oldWindowWidth){
+            Backdrop.TBMegaMenu.oldWindowWidth = windowWidth;
+            Backdrop.TBMegaMenu.menuResponsive();
           }
         });
 

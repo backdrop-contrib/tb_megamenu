@@ -2,12 +2,12 @@
 
 define('FONT_AWESOME_44', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css');
 
-include_once drupal_get_path('module', 'tb_megamenu') . '/tb_megamenu.functions.inc';
+include_once backdrop_get_path('module', 'tb_megamenu') . '/tb_megamenu.functions.inc';
 
 function tb_megamenu_admin_settings($form) {
   $menus = tb_megamenu_get_megamenus();
   foreach ($menus as $menu) {
-    if (drupal_valid_path('admin/structure/menu/manage/' . $menu->menu_name)) {
+    if (backdrop_valid_path('admin/structure/menu/manage/' . $menu->menu_name)) {
       $form[$menu->menu_name]['#tb_megamenu'] = $menu;
       $form[$menu->menu_name]['menu_name'] = array('#markup' => $menu->menu_name);
       $form[$menu->menu_name]['title'] = array('#markup' => check_plain($menu->title));
@@ -27,16 +27,16 @@ function theme_tb_megamenu_admin_settings($variables) {
       $menu['enabled']['#parents'] = array($key, 'enabled');
       $menu['enabled']['#name'] = $key . "[enabled]";
       $row = array();
-      $row[] = drupal_render($menu['menu_name']);
-      $row[] = drupal_render($menu['title']);
-      $row[] = drupal_render($menu['config_megamenu']);
-      $row[] = drupal_render($menu['config_links']);
+      $row[] = backdrop_render($menu['menu_name']);
+      $row[] = backdrop_render($menu['title']);
+      $row[] = backdrop_render($menu['config_megamenu']);
+      $row[] = backdrop_render($menu['config_links']);
       $rows[] = $row;
     }
   }
   $header = array(t('Menu Name'), t('Menu Title'));
   $header[] = array('data' => t('Operations'), 'colspan' => 2);
-  return theme('table', array('header' => $header, 'rows' => $rows, 'empty' => t('No MegaMenu block available. <a href="@link">Add MegaMenu Block</a>.', array('@link' => url('admin/config/user-interface/tb_megamenu/add'))), 'attributes' => array('id' => 'tb_megamenu'))) . drupal_render_children($form);
+  return theme('table', array('header' => $header, 'rows' => $rows, 'empty' => t('No MegaMenu block available. <a href="@link">Add MegaMenu Block</a>.', array('@link' => url('admin/config/user-interface/tb_megamenu/add'))), 'attributes' => array('id' => 'tb_megamenu'))) . backdrop_render_children($form);
 }
 
 function tb_megamenu_configure_form($form, &$form_state, $menu_names = array()) {
@@ -45,8 +45,8 @@ function tb_megamenu_configure_form($form, &$form_state, $menu_names = array()) 
     tb_megamenu_add_css($lib_fontawesome['css']);
   }
   else {
-    drupal_add_css(FONT_AWESOME_44, array(
-      'type' => 'external'
+    backdrop_add_css(FONT_AWESOME_44, array(
+      'type' => 'external',
     ));
   }
 
@@ -57,27 +57,27 @@ function tb_megamenu_configure_form($form, &$form_state, $menu_names = array()) 
       tb_megamenu_add_css($lib_chosen['css']);
     }
     if (!empty($lib_chosen['js'])) {
-      drupal_add_js($lib_chosen['js']);
+      backdrop_add_js($lib_chosen['js']);
     }
   }
-  tb_megamenu_add_css(drupal_get_path('module', 'tb_megamenu') . '/css/bootstrap.css');
-  tb_megamenu_add_css(drupal_get_path('module', 'tb_megamenu') . '/css/base.css');
-  tb_megamenu_add_css(drupal_get_path('module', 'tb_megamenu') . '/css/admin.css');
-  tb_megamenu_add_css(drupal_get_path('module', 'tb_megamenu') . '/css/backend.css');
+  tb_megamenu_add_css(backdrop_get_path('module', 'tb_megamenu') . '/css/bootstrap.css');
+  tb_megamenu_add_css(backdrop_get_path('module', 'tb_megamenu') . '/css/base.css');
+  tb_megamenu_add_css(backdrop_get_path('module', 'tb_megamenu') . '/css/admin.css');
+  tb_megamenu_add_css(backdrop_get_path('module', 'tb_megamenu') . '/css/backend.css');
 
   $csrf_string = !empty($menu_names) ? $menu_names[0] : 'tb-mega-menu';
 
-  drupal_add_js('
+  backdrop_add_js('
     (function ($) {
-      Drupal.TBMegaMenu = Drupal.TBMegaMenu || {};
-      Drupal.TBMegaMenu.ajax_link = "' . (variable_get('clean_url', 0) ? '' : '?q=') . '";
-      Drupal.TBMegaMenu.csrf_token = "' . drupal_get_token($csrf_string) . '";
+      Backdrop.TBMegaMenu = Backdrop.TBMegaMenu || {};
+      Backdrop.TBMegaMenu.ajax_link = "' . (config_get('system.performance', 'clean_url') ? '' : '?q=') . '";
+      Backdrop.TBMegaMenu.csrf_token = "' . backdrop_get_token($csrf_string) . '";
     })(jQuery);
   ', 'inline');
 
-  drupal_add_js(drupal_get_path('module', 'tb_megamenu') . '/js/tb-megamenu-backend.js');
-  drupal_add_js(drupal_get_path('module', 'tb_megamenu') . '/js/tb-megamenu-object.js');
-  if(!empty($menu_names)) {
+  backdrop_add_js(backdrop_get_path('module', 'tb_megamenu') . '/js/tb-megamenu-backend.js');
+  backdrop_add_js(backdrop_get_path('module', 'tb_megamenu') . '/js/tb-megamenu-object.js');
+  if (!empty($menu_names)) {
     $form['tb_megamenu'] = array(
       '#markup' => theme('tb_megamenu_backend', array(
         'menu_name' => $menu_names[0],

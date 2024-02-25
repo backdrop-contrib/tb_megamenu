@@ -10,7 +10,7 @@
     <?php elseif ($item['link']['href'] == "<separator>"): ?>
       <div class="tb_separator <?php if (isset($item['link']['localized_options']['attributes']['class'])) { print check_plain(implode(' ', $item['link']['localized_options']['attributes']['class'])); } ?>"></div>
     <?php else: ?>
-      <a href="<?php print check_url(url($item['link']['href'], $item['link']['options']));?>" <?php echo drupal_attributes($item['link']['#attributes']); ?>>
+      <a href="<?php print check_url(url($item['link']['href'], $item['link']['options']));?>" <?php if(!empty($item['link']['#attributes'])) { echo drupal_attributes($item['link']['#attributes']); } ?>>
         <?php if(!empty($item_config['xicon'])) : ?>
           <i class="<?php print $item_config['xicon'];?>"></i>
         <?php endif;?>

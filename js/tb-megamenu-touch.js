@@ -1,7 +1,7 @@
-Drupal.TBMegaMenu = Drupal.TBMegaMenu || {};
+Backdrop.TBMegaMenu = Backdrop.TBMegaMenu || {};
 
 (function ($) {
-  Drupal.TBMegaMenu.createTouchMenu = function(items) {
+  Backdrop.TBMegaMenu.createTouchMenu = function(items) {
     items.children('a, .tb_nolink').each( function() {
       var $item = $(this);
       var tbitem = $(this).parent();
@@ -30,7 +30,7 @@ Drupal.TBMegaMenu = Drupal.TBMegaMenu || {};
     });
   }
   
-  Drupal.TBMegaMenu.eventStopPropagation = function(event) {
+  Backdrop.TBMegaMenu.eventStopPropagation = function(event) {
     if (event.stopPropagation) {
       event.stopPropagation();
     }
@@ -39,12 +39,12 @@ Drupal.TBMegaMenu = Drupal.TBMegaMenu || {};
     }
   }
 
-  Drupal.behaviors.tbMegaMenuTouchAction = {
+  Backdrop.behaviors.tbMegaMenuTouchAction = {
     attach: function(context) {
       var isTouch = window.matchMedia('(pointer: coarse)').matches;
       if(isTouch){
         $('html').addClass('touch');
-        Drupal.TBMegaMenu.createTouchMenu($('.tb-megamenu ul.nav li.mega').has('.dropdown-menu'));
+        Backdrop.TBMegaMenu.createTouchMenu($('.tb-megamenu ul.nav li.mega').has('.dropdown-menu'));
 
         // When the user touches anywhere outside of the open menu item, close
         // the open menu item.
