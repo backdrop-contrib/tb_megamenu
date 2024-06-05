@@ -273,8 +273,6 @@ function template_preprocess_tb_megamenu_column(&$vars) {
     }
   }
   $vars['tb_items'] = implode("\n", $tb_items);
-  var_dump($tb_items);
-  die();
   $vars['classes_array'][] = 'span' . $col_config['width'];
   $vars['classes_array'][] = ' mega-col-nav';
   if (!empty($col_config['class'])) {
