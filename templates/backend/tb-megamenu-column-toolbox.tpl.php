@@ -50,7 +50,7 @@
           <option value=""></option>
           <?php
           foreach ($blocks_options as $block_key => $block) {
-            print "<option value=\"{$block_key}\">" . $block . "</option>\n";
+            print "<option value=\"{$block_key}\">" . $block['info'] . "</option>\n";
           }
           ?>
         </select>

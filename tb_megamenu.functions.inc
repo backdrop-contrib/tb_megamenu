@@ -83,9 +83,9 @@ function tb_megamenu_get_blocks_options() {
     $_blocks_array = array();
     foreach (module_implements('block_info') as $module) {
       if ($blocks = module_invoke($module, 'block_info')) {
-        foreach ($blocks as $block) {
-          if ($block['module'] != 'tb_megamenu') {
-            $_blocks_array[$block ['module'] . '--' . $block ['delta']] = empty($block['info']) ? $block['title'] : $block['info'];
+        foreach ($blocks as $delta => $info) {
+          if ($module != 'tb_megamenu') {
+            $_blocks_array[$module . '--' . $delta] = $info;
           }
         }
       }
@@ -135,7 +135,7 @@ function tb_megamenu_get_menu($menu_name) {
   $query->addField('t', 'menu_config');
   $query->addField('t', 'block_config');
   $query->condition('m.menu_name', $menu_name);
-  $query->condition('t.language', $language->language);
+  $query->condition('t.language', $language->langcode);
   return $query->execute()->fetchObject();
 }
 

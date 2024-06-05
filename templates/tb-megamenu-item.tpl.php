@@ -1,5 +1,5 @@
 <?php if(isset($item['link']['href'])) : ?>
-  <li <?php print $attributes;?> class="<?php print $classes;?>">
+  <li <?php print backdrop_attributes($attributes);?> class="<?php print implode(' ', $classes);?>">
     <?php if ($item['link']['href'] == "<nolink>"): ?>
       <a href="#" class="tb_nolink <?php if (isset($item['link']['localized_options']['attributes']['class'])) { print check_plain(implode(' ', $item['link']['localized_options']['attributes']['class'])); } ?>">
         <?php if(!empty($item_config['xicon'])) : ?>

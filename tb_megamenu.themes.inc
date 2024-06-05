@@ -57,7 +57,7 @@ function template_preprocess_tb_megamenu(&$vars) {
   }
 }
 
-function template_preprocess_tb_megamenu_nav($vars) {
+function template_preprocess_tb_megamenu_nav(&$vars) {
   $items = $vars['items'];
   $level = $vars['level'];
   $lis = array();
@@ -80,7 +80,7 @@ function template_preprocess_tb_megamenu_nav($vars) {
   $vars['classes_array'][] = "items-" . count($items);
 }
 
-function template_preprocess_tb_megamenu_item($vars) {
+function template_preprocess_tb_megamenu_item(&$vars) {
   $level = $vars['level'];
   $item = $vars['item'];
   $mlid = $item['link']['mlid'];
@@ -179,7 +179,7 @@ function template_preprocess_tb_megamenu_item($vars) {
   }
 }
 
-function template_preprocess_tb_megamenu_submenu($vars) {
+function template_preprocess_tb_megamenu_submenu(&$vars) {
   $parent = $vars['parent'];
   $mlid = $parent['link']['mlid'];
   $menu_config = $vars['menu_config'];
@@ -219,7 +219,7 @@ function template_preprocess_tb_megamenu_submenu($vars) {
   }
 }
 
-function template_preprocess_tb_megamenu_row($vars) {
+function template_preprocess_tb_megamenu_row(&$vars) {
   $row = $vars['row'];
   $cols = array();
   foreach ($row as $col) {
@@ -238,7 +238,7 @@ function template_preprocess_tb_megamenu_row($vars) {
   $vars['classes_array'][] = 'row-fluid';
 }
 
-function template_preprocess_tb_megamenu_column($vars) {
+function template_preprocess_tb_megamenu_column(&$vars) {
   $col = $vars['col']['col_content'];
   $col_config = $vars['col']['col_config'];
   tb_megamenu_edit_col_config($col_config);
@@ -273,6 +273,8 @@ function template_preprocess_tb_megamenu_column($vars) {
     }
   }
   $vars['tb_items'] = implode("\n", $tb_items);
+  var_dump($tb_items);
+  die();
   $vars['classes_array'][] = 'span' . $col_config['width'];
   $vars['classes_array'][] = ' mega-col-nav';
   if (!empty($col_config['class'])) {
@@ -290,7 +292,7 @@ function template_preprocess_tb_megamenu_column($vars) {
   $vars['attributes_array']['id'] = tb_megamenu_get_counter("column");
 }
 
-function template_preprocess_tb_megamenu_subnav($vars) {
+function template_preprocess_tb_megamenu_subnav(&$vars) {
   $col = $vars['col'];
 //  $items = $vars['items'];
 
@@ -314,7 +316,7 @@ function template_preprocess_tb_megamenu_subnav($vars) {
   $vars['classes_array'][] = "items-" . count($col);
 }
 
-function template_preprocess_tb_megamenu_block($vars) {
+function template_preprocess_tb_megamenu_block(&$vars) {
   $block = tb_megamenu_load_block($vars['block_key']);
   if ($block) {
     $module = $block->module;
@@ -372,7 +374,7 @@ function template_preprocess_tb_megamenu_block($vars) {
   }
 }
 
-function template_preprocess_tb_megamenu_backend($vars) {
+function template_preprocess_tb_megamenu_backend(&$vars) {
   $menu_name = $vars['menu_name'];
   $block_config = tb_megamenu_get_block_config($menu_name);
   tb_megamenu_edit_block_config($block_config);

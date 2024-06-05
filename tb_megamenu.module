@@ -310,7 +310,7 @@ function tb_megamenu_block_info() {
   foreach($menus as $menu) {
     $blocks[$menu->menu_name] = array(
       'info' => t("TB Mega Menu: @title",
-        array('@title' => $menu->title)),
+        array('@title' => $menu->menu_name)),
         'cache' => BACKDROP_NO_CACHE,
     );
   }
