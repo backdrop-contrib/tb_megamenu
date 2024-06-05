@@ -484,7 +484,7 @@ Backdrop.TBMegaMenu = Backdrop.TBMegaMenu || {};
           });
         }
 
-        $(window).resize(function() {
+        $(window).on('resize', function() {
           var windowWidth = window.innerWidth ? window.innerWidth : $(window).width();
           if(windowWidth != Backdrop.TBMegaMenu.oldWindowWidth){
             Backdrop.TBMegaMenu.oldWindowWidth = windowWidth;

@@ -1,5 +1,5 @@
 Backdrop.TBMegaMenu = Backdrop.TBMegaMenu || {};
-!function ($) {
+(function ($) {
   var currentSelected = null,
   menu_name,
   megamenu, nav_items, nav_subs, nav_cols, nav_all;
@@ -883,9 +883,9 @@ Backdrop.TBMegaMenu = Backdrop.TBMegaMenu || {};
     unbindEvents(els);
     bindEvents(els);
   }
-}(jQuery);
+})(jQuery);
 
-!function($){
+(function($){
   $.extend(Backdrop.TBMegaMenu, {
     prepare: function(){
       var panel = $('#jform_params_mm_type').closest ('.controls');
@@ -967,10 +967,10 @@ Backdrop.TBMegaMenu = Backdrop.TBMegaMenu || {};
     }
   });
 
-  $(window).load(function(){
+  $(window).on('load', function(){
     Backdrop.TBMegaMenu.initPanel();
     Backdrop.TBMegaMenu.initPreSubmit();
     Backdrop.TBMegaMenu.initRadioGroup();
     Backdrop.TBMegaMenu.prepare();
   });
-}(jQuery);
+})(jQuery);
