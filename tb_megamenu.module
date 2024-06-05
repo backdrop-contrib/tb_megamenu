@@ -280,9 +280,9 @@ function tb_megamenu_block_view($delta = 0) {
   static $added_js_css = false;
   if(!$added_js_css) {
     $added_js_css = true;
-    if(module_exists('fontawesome') && file_exists(libraries_get_path('fontawesome') . '/css/font-awesome.css')) {
-      tb_megamenu_add_css(libraries_get_path('fontawesome') . '/css/font-awesome.css');
-    }else{
+    if (module_exists('fontawesome') && file_exists(backdrop_get_path('module', 'fontawesome') . '/css/font-awesome.css')) {
+      tb_megamenu_add_css(backdrop_get_path('module', 'fontawesome') . '/css/font-awesome.css');
+    } else {
       backdrop_add_css(FONT_AWESOME_44, array(
         'type' => 'external',
       ));
@@ -361,23 +361,4 @@ function tb_megamenu_block_view_alter(&$data, $block) {
  */
 function tb_megamenu_form_menu_overview_form_alter(&$form, &$form_state) {
   $form['#submit'][] = 'tb_megamenu_update_megamenus';
-}
-
-/**
- * Implements hook_features_api().
- */
-function tb_megamenu_features_api() {
-  return array(
-    'tb_megamenu' => array(
-      'name' => 'TB Mega Menu',
-      'file' => backdrop_get_path('module', 'tb_megamenu')
-        . '/tb_megamenu.features.inc',
-      'default_hook' => 'tb_megamenu_default_menus',
-      // Write exports to a file with a name like
-      // MODULENAME.features.tb_megamenu.inc.
-      'default_file' => FEATURES_DEFAULTS_INCLUDED,
-      // Offer this component as an option on the initial feature creation form.
-      'feature_source' => TRUE,
-    ),
-  );
 }

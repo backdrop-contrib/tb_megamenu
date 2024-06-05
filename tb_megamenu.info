@@ -5,5 +5,4 @@ version = VERSION
 backdrop = 1.x
 type = module
 
-dependencies[] = libraries
 configure = admin/structure/tb-megamenu

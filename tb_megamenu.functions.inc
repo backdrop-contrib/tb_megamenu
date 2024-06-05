@@ -80,15 +80,18 @@ function tb_megamenu_get_blocks_info() {
 function tb_megamenu_get_blocks_options() {
   static $_blocks_array = array();
   if (empty($_blocks_array)) {
-    $blocks = block_rehash($GLOBALS['conf']['theme_default']);
     $_blocks_array = array();
-    foreach ($blocks as $block) {
-      if ($block['module'] != 'tb_megamenu') {
-        $_blocks_array[$block ['module'] . '--' . $block ['delta']] = empty($block['info']) ? $block['title'] : $block['info'];
+    foreach (module_implements('block_info') as $module) {
+      if ($blocks = module_invoke($module, 'block_info')) {
+        foreach ($blocks as $block) {
+          if ($block['module'] != 'tb_megamenu') {
+            $_blocks_array[$block ['module'] . '--' . $block ['delta']] = empty($block['info']) ? $block['title'] : $block['info'];
+          }
+        }
       }
     }
-    asort($_blocks_array);
   }
+  asort($_blocks_array);
   return $_blocks_array;
 }
 
