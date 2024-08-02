@@ -66,11 +66,14 @@ function tb_megamenu_add_css($file) {
 function tb_megamenu_get_blocks_info() {
   static $_blocks_array = array();
   if (empty($_blocks_array)) {
-    $blocks = db_select('block', 'b')->fields('b')->execute()->fetchAll();
     $_blocks_array = array();
-    foreach ($blocks as $block) {
-      if ($block->module != 'tb_megamenu') {
-        $_blocks_array[$block->module . '--' . $block->delta] = $block;
+    foreach (module_implements('block_info') as $module) {
+      if ($blocks = module_invoke($module, 'block_info')) {
+        foreach ($blocks as $delta => $info) {
+          if ($module != 'tb_megamenu') {
+            $_blocks_array[$module . '--' . $delta] = $info;
+          }
+        }
       }
     }
   }
