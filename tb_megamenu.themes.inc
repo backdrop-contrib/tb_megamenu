@@ -11,6 +11,7 @@ function template_preprocess_tb_megamenu(&$vars) {
   if (function_exists('i18n_menu_localize_tree')) {
     $items = i18n_menu_localize_tree($items);
   }
+  $items = usenix_og_auto_menu_process_tb_megamenu_links($items);
   $items_page = menu_tree_page_data($menu_name);
   $trail = tb_megamenu_build_page_trail($items_page);
   $menu_config = tb_megamenu_get_menu_config($menu_name);
@@ -27,9 +28,9 @@ function template_preprocess_tb_megamenu(&$vars) {
   if ($block_config['animation'] != 'none') {
     $vars['classes'][] = "animate";
     $vars['classes'][] = $block_config['animation'];
-    $vars['attributes_array']['data-duration'] = $block_config['duration'];
-    $vars['attributes_array']['data-delay'] = $block_config['delay'];
-    $vars['attributes_array']['id'] = "tb-megamenu-" . str_replace('_', '-', $menu_name);
+    $vars['attributes']['data-duration'] = $block_config['duration'];
+    $vars['attributes']['data-delay'] = $block_config['delay'];
+    $vars['attributes']['id'] = "tb-megamenu-" . str_replace('_', '-', $menu_name);
   }
   $vars['content'] = theme('tb_megamenu_nav', array(
     'menu_name' => $vars['menu_name'],
@@ -159,24 +160,24 @@ function template_preprocess_tb_megamenu_item(&$vars) {
     $vars['classes'][] = check_plain($item['link']['localized_options']['item_attributes']['class']);
   }
 
-  $vars['attributes_array']['data-id'] = $mlid;
-  $vars['attributes_array']['data-level'] = $level;
-  $vars['attributes_array']['data-type'] = 'menu_item';
-  $vars['attributes_array']['data-class'] = $item_config['class'];
-  $vars['attributes_array']['data-xicon'] = $item_config['xicon'];
-  $vars['attributes_array']['data-caption'] = $item_config['caption'];
-  $vars['attributes_array']['data-alignsub'] = $item_config['alignsub'];
-  $vars['attributes_array']['data-group'] = $item_config['group'];
-  $vars['attributes_array']['data-hidewcol'] = $item_config['hidewcol'];
-  $vars['attributes_array']['data-hidesub'] = $item_config['hidesub'];
+  $vars['attributes']['data-id'] = $mlid;
+  $vars['attributes']['data-level'] = $level;
+  $vars['attributes']['data-type'] = 'menu_item';
+  $vars['attributes']['data-class'] = $item_config['class'];
+  $vars['attributes']['data-xicon'] = $item_config['xicon'];
+  $vars['attributes']['data-caption'] = $item_config['caption'];
+  $vars['attributes']['data-alignsub'] = $item_config['alignsub'];
+  $vars['attributes']['data-group'] = $item_config['group'];
+  $vars['attributes']['data-hidewcol'] = $item_config['hidewcol'];
+  $vars['attributes']['data-hidesub'] = $item_config['hidesub'];
   if ($vars['section'] == 'backend') {
-    $vars['attributes_array']['title'] = t("Menu Item");
+    $vars['attributes']['title'] = t("Menu Item");
   }
 
   if (!empty($item['link']['localized_options']['item_attributes'])) {
     // Add additional list item attributes besides the class (which was handled separately above).
 
-    $vars['attributes_array'] += array_diff_key( $item['link']['localized_options']['item_attributes'], array('class' => NULL));
+    $vars['attributes'] += array_diff_key( $item['link']['localized_options']['item_attributes'], array('class' => NULL));
   }
 }
 
@@ -213,10 +214,10 @@ function template_preprocess_tb_megamenu_submenu(&$vars) {
     $vars['classes'][] = 'mega-dropdown-menu';
   }
   $vars['classes'][] = 'nav-child';
-  $vars['attributes_array']['data-class'] = $submenu_config['class'];
-  $vars['attributes_array']['data-width'] = $submenu_config['width'];
+  $vars['attributes']['data-class'] = $submenu_config['class'];
+  $vars['attributes']['data-width'] = $submenu_config['width'];
   if (!empty($submenu_config['width'])) {
-    $vars['attributes_array']['style'] = "width: " . $submenu_config['width'] . "px;";
+    $vars['attributes']['style'] = "width: " . $submenu_config['width'] . "px;";
   }
 }
 
@@ -247,7 +248,7 @@ function template_preprocess_tb_megamenu_column(&$vars) {
   $vars['close_button'] = FALSE;
   $tb_items = array();
   foreach ($col as $tb_item) {
-    if ($tb_item['type'] == 'menu_item') {
+    if ($tb_item && $tb_item['type'] == 'menu_item') {
       $tb_items[] = theme('tb_megamenu_subnav', array(
         'menu_name' => $vars['menu_name'],
         'col' => $col,
@@ -261,11 +262,14 @@ function template_preprocess_tb_megamenu_column(&$vars) {
       break;
     }
     else {
-      $tb_items[] = theme('tb_megamenu_block', array(
-        'block_key' => $tb_item['block_key'],
-        'section' => $vars['section'],
-        'showblocktitle' => $col_config['showblocktitle'],
-      ));
+      $tb_items = [];
+      if ($tb_item) {
+        $tb_items[] = theme('tb_megamenu_block', array(
+          'block_key' => $tb_item['block_key'],
+          'section' => $vars['section'],
+          'showblocktitle' => $col_config['showblocktitle'],
+        ));
+      }
       $vars['attributes_array']['data-showblocktitle'] = $col_config['showblocktitle'];
 
       if ($vars['section'] !== 'frontend') {
@@ -285,10 +289,10 @@ function template_preprocess_tb_megamenu_column(&$vars) {
   if ($col_config['hidewcol']) {
     $vars['classes'][] = 'hidden-collapse';
   }
-  $vars['attributes_array']['data-class'] = $col_config['class'];
-  $vars['attributes_array']['data-width'] = $col_config['width'];
-  $vars['attributes_array']['data-hidewcol'] = $col_config['hidewcol'];
-  $vars['attributes_array']['id'] = tb_megamenu_get_counter("column");
+  $vars['attributes']['data-class'] = $col_config['class'];
+  $vars['attributes']['data-width'] = $col_config['width'];
+  $vars['attributes']['data-hidewcol'] = $col_config['hidewcol'];
+  $vars['attributes']['id'] = tb_megamenu_get_counter("column");
 }
 
 function template_preprocess_tb_megamenu_subnav(&$vars) {
@@ -365,8 +369,8 @@ function template_preprocess_tb_megamenu_block(&$vars) {
     }
     $vars['classes'][] = "tb-block";
     $vars['classes'][] = "tb-megamenu-block";
-    $vars['attributes_array']['data-type'] = "block";
-    $vars['attributes_array']['data-block'] = $vars['block_key'];
+    $vars['attributes']['data-type'] = "block";
+    $vars['attributes']['data-block'] = $vars['block_key'];
   }
   else {
     $vars['content'] = NULL;

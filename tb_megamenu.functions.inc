@@ -352,7 +352,7 @@ function tb_megamenu_sync_config($items, &$item_config, $_mlid, $section) {
     foreach ($item_config['rows_content'] as $i => $row) {
       foreach ($row as $j => $col) {
         foreach ($col['col_content'] as $k => $tb_item) {
-          if ($tb_item['type'] == 'menu_item') {
+          if ($tb_item && $tb_item['type'] == 'menu_item') {
             $hash[$tb_item['mlid']] = array('row' => $i, 'col' => $j);
             $existed = false;
             foreach ($items as $item) {
@@ -373,7 +373,7 @@ function tb_megamenu_sync_config($items, &$item_config, $_mlid, $section) {
             }
           }
           else {
-            if (!tb_megamenu_block_content_exists($tb_item['block_key'], $section)) {
+            if ($tb_item && !tb_megamenu_block_content_exists($tb_item['block_key'], $section)) {
               unset($item_config['rows_content'][$i][$j]['col_content'][$k]);
               if (empty($item_config['rows_content'][$i][$j]['col_content'])) {
                 unset($item_config['rows_content'][$i][$j]);
@@ -440,6 +440,9 @@ function tb_megamenu_insert_tb_item(&$item_config, $row, $col, $item) {
     // Sort all cells by ascending weight value to match the menu ordering.
     $weight = [];
     foreach ($new_col as $col_key => $col_vals) {
+      if (empty($col_vals)) {
+        unset($new_col[$col_key]);
+      }
       if (isset($col_vals['weight'])) {
         $weight[] = $col_vals['weight'];
       }
@@ -527,7 +530,7 @@ function tb_megamenu_edit_block_config(&$block_config) {
     $block_config['style'] = "";
   }
   if (!isset($block_config['auto-arrow'])) {
-    $block_config['auto-arrow'] = TRUE;
+    $block_config['auto-arrow'] = false;
   }
   if (!isset($block_config['duration'])) {
     $block_config['duration'] = 400;
@@ -766,17 +769,17 @@ function tb_megamenu_update_megamenus(&$form, &$form_state) {
       $tb_megamenu = db_select('tb_megamenus', 't')
         ->fields('t')
         ->condition('menu_name', $menu_name)
-        ->condition('language', $language->language)
+        ->condition('language', $language->langcode)
         ->execute()->fetchObject();
       if($tb_megamenu) {
         db_update('tb_megamenus')
           ->fields(array(
             'menu_config' => json_encode($menu_config),
             'block_config' => json_encode($block_config),
-            'language' => $language->language
+            'language' => $language->langcode
           ))
           ->condition('menu_name', $menu_name)
-          ->condition('language', $language->language)
+          ->condition('language', $language->langcode)
           ->execute();
       }
       else {
