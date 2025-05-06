@@ -766,17 +766,17 @@ function tb_megamenu_update_megamenus(&$form, &$form_state) {
       $tb_megamenu = db_select('tb_megamenus', 't')
         ->fields('t')
         ->condition('menu_name', $menu_name)
-        ->condition('language', $language->language)
+        ->condition('language', $language->langcode)
         ->execute()->fetchObject();
       if($tb_megamenu) {
         db_update('tb_megamenus')
           ->fields(array(
             'menu_config' => json_encode($menu_config),
             'block_config' => json_encode($block_config),
-            'language' => $language->language
+            'language' => $language->langcode
           ))
           ->condition('menu_name', $menu_name)
-          ->condition('language', $language->language)
+          ->condition('language', $language->langcode)
           ->execute();
       }
       else {
