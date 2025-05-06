@@ -11,6 +11,7 @@ function template_preprocess_tb_megamenu(&$vars) {
   if (function_exists('i18n_menu_localize_tree')) {
     $items = i18n_menu_localize_tree($items);
   }
+  $items = usenix_og_auto_menu_process_tb_megamenu_links($items);
   $items_page = menu_tree_page_data($menu_name);
   $trail = tb_megamenu_build_page_trail($items_page);
   $menu_config = tb_megamenu_get_menu_config($menu_name);
@@ -247,7 +248,7 @@ function template_preprocess_tb_megamenu_column(&$vars) {
   $vars['close_button'] = FALSE;
   $tb_items = array();
   foreach ($col as $tb_item) {
-    if ($tb_item['type'] == 'menu_item') {
+    if ($tb_item && $tb_item['type'] == 'menu_item') {
       $tb_items[] = theme('tb_megamenu_subnav', array(
         'menu_name' => $vars['menu_name'],
         'col' => $col,
@@ -261,12 +262,15 @@ function template_preprocess_tb_megamenu_column(&$vars) {
       break;
     }
     else {
-      $tb_items[] = theme('tb_megamenu_block', array(
-        'block_key' => $tb_item['block_key'],
-        'section' => $vars['section'],
-        'showblocktitle' => $col_config['showblocktitle'],
-      ));
-      $vars['attributes']['data-showblocktitle'] = $col_config['showblocktitle'];
+      $tb_items = [];
+      if ($tb_item) {
+        $tb_items[] = theme('tb_megamenu_block', array(
+          'block_key' => $tb_item['block_key'],
+          'section' => $vars['section'],
+          'showblocktitle' => $col_config['showblocktitle'],
+        ));
+      }
+      $vars['attributes_array']['data-showblocktitle'] = $col_config['showblocktitle'];
 
       if ($vars['section'] !== 'frontend') {
         $vars['close_button'] = '<span class="close fa fa-trash-o" title="' . t("Remove this block") . '">&nbsp;</span>';
