@@ -20,7 +20,7 @@ function tb_megamenu_request() {
             db_update('tb_megamenus')->fields(array('menu_config' => $menu_config, 'block_config' => $block_config))->condition('menu_name', $menu_name)->execute();
           }
           else {
-            db_insert('tb_megamenus')->fields(array('menu_name' => $menu_name, 'block_config' => $block_config, 'menu_config' => $menu_config))->execute();
+            db_insert('tb_megamenus')->fields(array('menu_name' => $menu_name, 'block_config' => $block_config, 'menu_config' => $menu_config, 'language' => $language->langcode))->execute();
           }
         }
       }
